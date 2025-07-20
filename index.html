@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Генератор штрихкоду</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    input, select, button {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 300px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    svg {
+      margin-top: 1rem;
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Генератор штрихкоду</h1>
+  <input type="text" id="barcodeInput" placeholder="Введи текст або цифри" />
+  <select id="barcodeType" aria-label="Тип штрихкоду">
+    <option value="CODE128">Code128 (універсальний)</option>
+    <option value="EAN13">EAN-13</option>
+    <option value="UPC">UPC</option>
+    <option value="ISBN">ISBN</option>
+  </select>
+  <button onclick="generateBarcode()">Згенерувати</button>
+  <svg id="barcode"></svg>
+
+  <script>
+    const input = document.getElementById("barcodeInput");
+    const barcode = document.getElementById("barcode");
+    const typeSelect = document.getElementById("barcodeType");
+
+    function generateBarcode() {
+      const value = input.value.trim();
+      const type = typeSelect.value;
+      if (!value) {
+        alert("Поле не може бути порожнім");
+        return;
+      }
+      try {
+        JsBarcode(barcode, value, {
+          format: type,
+          displayValue: true,
+          fontSize: 18,
+          lineColor: "#000",
+          height: 80,
+          margin: 10,
+        });
+      } catch(e) {
+        alert("Не вдалося згенерувати штрихкод: " + e.message);
+      }
+    }
+
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        generateBarcode();
+      }
+    });
+  </script>
+</body>
+</html>
